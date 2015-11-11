@@ -20,17 +20,17 @@ using System.Web.Http.ModelBinding;
 namespace FriendFinder.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    [RoutePrefix("user")]
+    public class UserController : ApiController
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        public UserController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager,
+        public UserController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             UserManager = userManager;
