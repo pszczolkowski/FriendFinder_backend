@@ -50,24 +50,6 @@ namespace FriendFinder.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class RegisterExternalBindingModel
-    {
-        [Required]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-    }
-
-    public class RemoveLoginBindingModel
-    {
-        [Required]
-        [Display(Name = "Login provider")]
-        public string LoginProvider { get; set; }
-
-        [Required]
-        [Display(Name = "Provider key")]
-        public string ProviderKey { get; set; }
-    }
-
     public class SetPasswordBindingModel
     {
         [Required]
