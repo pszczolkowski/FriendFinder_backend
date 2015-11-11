@@ -9,7 +9,7 @@ namespace FriendFinder.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(FriendFinder.Models.ApplicationDbContext context)
