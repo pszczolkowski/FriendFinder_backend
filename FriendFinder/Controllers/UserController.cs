@@ -20,7 +20,7 @@ using System.Web.Http.ModelBinding;
 namespace FriendFinder.Controllers
 {
     [Authorize]
-    [RoutePrefix("user")]
+    [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -56,7 +56,7 @@ namespace FriendFinder.Controllers
         
        // [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
-        [Route("api/register")]
+        [Route("register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace FriendFinder.Controllers
                 {
                     foreach (string error in result.Errors)
                     {
-                        ModelState.AddModelError("", error);
+                        ModelState.AddModelError("Message", error);
                     }
                 }
 
@@ -105,7 +105,7 @@ namespace FriendFinder.Controllers
         }
             
         // POST api/Account/Logout
-        [Route("Logout")]
+        [Route("logout")]
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
@@ -113,7 +113,7 @@ namespace FriendFinder.Controllers
         }
 
         // POST api/Account/ChangePassword
-        [Route("ChangePassword")]
+        [Route("changePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -133,7 +133,7 @@ namespace FriendFinder.Controllers
         }
 
         // POST api/Account/SetPassword
-        [Route("SetPassword")]
+        [Route("setPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
             if (!ModelState.IsValid)
