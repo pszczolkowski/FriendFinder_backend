@@ -14,6 +14,7 @@ namespace FriendFinder
         {
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
+            config.EnableCors();
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
@@ -22,7 +23,7 @@ namespace FriendFinder
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

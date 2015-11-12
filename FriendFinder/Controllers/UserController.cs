@@ -16,11 +16,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.Http.Cors;
 
 namespace FriendFinder.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/user")]
+    [RoutePrefix("user")]
     public class UserController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -54,7 +55,7 @@ namespace FriendFinder.Controllers
 
 
         
-       // [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
@@ -104,7 +105,7 @@ namespace FriendFinder.Controllers
             return null;
         }
             
-        // POST api/Account/Logout
+        // POST user/logout
         [Route("logout")]
         public IHttpActionResult Logout()
         {
@@ -112,7 +113,7 @@ namespace FriendFinder.Controllers
             return Ok();
         }
 
-        // POST api/Account/ChangePassword
+        // POST user/changePassword
         [Route("changePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -132,7 +133,7 @@ namespace FriendFinder.Controllers
             return Ok();
         }
 
-        // POST api/Account/SetPassword
+        // POST user/setPassword
         [Route("setPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
