@@ -15,6 +15,7 @@ namespace FriendFinder
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
+			ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
     }
 }
