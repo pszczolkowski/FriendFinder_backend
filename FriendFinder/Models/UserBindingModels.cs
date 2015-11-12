@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace FriendFinder.Models
 {
-    // Models used as parameters to AccountController actions.
+    // Models used as parameters to UserController actions.
 
     public class AddExternalLoginBindingModel
     {
@@ -37,10 +37,6 @@ namespace FriendFinder.Models
         [Required]
         [Display(Name = "Login")]
         public string Login { get; set; }
-
-        [Required]
-        [Display(Name ="Username")]
-        public string Username { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
