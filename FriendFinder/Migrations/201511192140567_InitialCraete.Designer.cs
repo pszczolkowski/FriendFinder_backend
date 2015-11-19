@@ -7,18 +7,18 @@ namespace FriendFinder.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class InitialCraete : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCraete));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511111553261_InitialCreate"; }
+            get { return "201511192140567_InitialCraete"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

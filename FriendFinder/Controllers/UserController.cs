@@ -17,6 +17,9 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.Http.Cors;
+using FriendFinder.Repository;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace FriendFinder.Controllers
 {
@@ -26,9 +29,13 @@ namespace FriendFinder.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private PositionRepository repo = new PositionRepository();
 
-        public UserController()
+        public UserController() {}
+
+        public UserController(PositionRepository _repo)
         {
+            this.repo = _repo;
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -52,9 +59,7 @@ namespace FriendFinder.Controllers
         
         
          public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
-
-
-        
+                
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         [AllowAnonymous]
         [Route("register")]
@@ -65,7 +70,7 @@ namespace FriendFinder.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Login, Login = model.Login };
+            var user = new ApplicationUser() { Login = model.Login/*, UserName = model.Login */ };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -112,6 +117,32 @@ namespace FriendFinder.Controllers
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
+        [Route("position")]
+        [HttpPost]
+        public HttpResponseMessage Post([FromBody]JToken json)
+        {
+            String userId = User.Identity.GetUserId();
+            var jPositions = json["Positions"];
+            foreach (var jPosition in jPositions)
+            {
+                Position position = new Position()
+                {
+                    UserId = userId,
+                    Longitude = (double)jPosition["Longitude"],
+                    Latitude = (double)jPosition["Latitude"]
+
+                };
+
+                repo.Add(position);
+                repo.Save();
+            }
+             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+            
+
+
+
 
         // POST user/changePassword
         [Route("changePassword")]
@@ -163,16 +194,17 @@ namespace FriendFinder.Controllers
         {
             public string LoginProvider { get; set; }
             public string ProviderKey { get; set; }
-            public string UserName { get; set; }
+            //public string UserName { get; set; }
+            public string Login { get; set; }
 
             public IList<Claim> GetClaims()
             {
                 IList<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
 
-                if (UserName != null)
+                if (/*UserName*/ Login!= null)
                 {
-                    claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.Name, /*UserName*/Login, null, LoginProvider));
                 }
 
                 return claims;
@@ -202,7 +234,8 @@ namespace FriendFinder.Controllers
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
+                    Login = identity.FindFirstValue(ClaimTypes.Name)
+                   // UserName = identity.FindFirstValue(ClaimTypes.Name)
                 };
             }
         }

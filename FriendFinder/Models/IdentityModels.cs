@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity;
 
 namespace FriendFinder.Models
 {
@@ -23,6 +24,9 @@ namespace FriendFinder.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext() : base("FriendFinderDB") { }
+
+        public DbSet<Position> Positions { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
