@@ -16,5 +16,11 @@ namespace FriendFinder.Models
         public double Latitude { get; set; }
     }
 
-    
+    public class Friend
+    {
+        [Key]
+        public string UserId { get; set; }
+        public string FriendId { get; set; }
+        public string UserFriendId { get; set; }
+    }
 }

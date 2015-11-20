@@ -29,13 +29,14 @@ namespace FriendFinder.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private PositionRepository repo = new PositionRepository();
-
+        private PositionRepository positionRepo = new PositionRepository();
+        private FriendRepository friendRepo = new FriendRepository();
         public UserController() {}
 
-        public UserController(PositionRepository _repo)
+        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo)
         {
-            this.repo = _repo;
+            this.positionRepo = _positionRepo;
+            this.friendRepo = _friendRepo;
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -133,8 +134,8 @@ namespace FriendFinder.Controllers
 
                 };
 
-                repo.Add(position);
-                repo.Save();
+                positionRepo.Add(position);
+                positionRepo.Save();
             }
              return new HttpResponseMessage(HttpStatusCode.OK);
         }
@@ -154,9 +155,14 @@ namespace FriendFinder.Controllers
             return userIdentity;
         }
             
-
-
-
+        [Route("friend")]
+        [HttpGet]
+        public IEnumerable<Friend> GetFriend()
+        {
+            String userId = User.Identity.GetUserId();
+            var friends = friendRepo.GetLoggedFriends(userId);
+            return friends;
+        }
 
         // POST user/changePassword
         [Route("changePassword")]

@@ -26,6 +26,7 @@ namespace FriendFinder.Models
         public ApplicationDbContext() : base("FriendFinderDB") { }
 
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Friend> Friends { get; set; }
 
         public static ApplicationDbContext Create()
         {

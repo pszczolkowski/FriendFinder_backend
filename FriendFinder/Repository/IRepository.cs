@@ -9,6 +9,6 @@ namespace FriendFinder.Repository
     interface IRepository <T>
     {
          void Save();
-         T Add(T entity);
+        // T Add(T entity);
     }
 }
