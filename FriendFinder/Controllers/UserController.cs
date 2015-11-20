@@ -119,7 +119,7 @@ namespace FriendFinder.Controllers
         }
         [Route("position")]
         [HttpPost]
-        public HttpResponseMessage Post([FromBody]JToken json)
+        public HttpResponseMessage PostPosition([FromBody]JToken json)
         {
             String userId = User.Identity.GetUserId();
             var jPositions = json["Positions"];
@@ -139,6 +139,20 @@ namespace FriendFinder.Controllers
              return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        [Route("identity")]
+        [HttpGet]
+        public IdentityUser GetIdentity()
+        {
+            String userId = User.Identity.GetUserId();
+            String userName = User.Identity.GetUserName();
+
+            IdentityUser userIdentity = new IdentityUser()
+            {
+                Id = userId,
+                UserName = userName
+            };
+            return userIdentity;
+        }
             
 
 
