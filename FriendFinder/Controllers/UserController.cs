@@ -31,12 +31,16 @@ namespace FriendFinder.Controllers
         private ApplicationUserManager _userManager;
         private PositionRepository positionRepo = new PositionRepository();
         private FriendRepository friendRepo = new FriendRepository();
+        private FriendPositionRepository friendPositionRepo = new FriendPositionRepository();
+
         public UserController() {}
 
-        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo)
+        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, 
+            FriendPositionRepository _friendPositionRepo)
         {
             this.positionRepo = _positionRepo;
             this.friendRepo = _friendRepo;
+            this.friendPositionRepo = _friendPositionRepo;
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -163,6 +167,15 @@ namespace FriendFinder.Controllers
             var friends = friendRepo.GetLoggedFriends(userId);
             return friends;
         }
+/*
+        [Route("location")]
+        [HttpGet]
+        public IEnumerable<FriendPosition> GetLocation(double longitude, double latitude, int distance)
+        {
+            String userId = User.Identity.GetUserId();
+            var locations = friendPositionRepo.GetFriendLocation();
+            return locations;
+        }*/
 
         // POST user/changePassword
         [Route("changePassword")]

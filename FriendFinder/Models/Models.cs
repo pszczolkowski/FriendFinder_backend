@@ -21,6 +21,25 @@ namespace FriendFinder.Models
         [Key]
         public string UserId { get; set; }
         public string FriendId { get; set; }
-        public string UserFriendId { get; set; }
+        public string FriendUserName { get; set; }
     }
+
+    public class FriendPosition
+    {
+        [Key]
+        [Column(Order = 1)]
+        public string FriendId { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public string FriendUserName { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+    }
+
+  /*  public class PositionWithDistance
+    {
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public int Distance { get; set; }
+    }*/
 }
