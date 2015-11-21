@@ -75,7 +75,7 @@ namespace FriendFinder.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { Login = model.Login/*, UserName = model.Login */ };
+            var user = new ApplicationUser() { Login = model.Login, UserName = model.Login  };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
