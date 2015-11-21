@@ -31,12 +31,14 @@ namespace FriendFinder.Controllers
         private ApplicationUserManager _userManager;
         private PositionRepository positionRepo = new PositionRepository();
         private FriendRepository friendRepo = new FriendRepository();
+        private InvitationRepository invitationRepo = new InvitationRepository();
         public UserController() {}
 
-        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo)
+        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, InvitationRepository _invitationRepo)
         {
             this.positionRepo = _positionRepo;
             this.friendRepo = _friendRepo;
+            this.invitationRepo = _invitationRepo;
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -162,6 +164,40 @@ namespace FriendFinder.Controllers
             String userId = User.Identity.GetUserId();
             var friends = friendRepo.GetLoggedFriends(userId);
             return friends;
+        }
+
+        [Route("invitation")]
+        [HttpGet]
+        public IEnumerable<Invitation> GetInvitations()
+        {
+            String userId = User.Identity.GetUserId();
+            var invitations = invitationRepo.getInvitations(userId);
+            return invitations;
+        }
+
+        [Route("invitation")]
+        [HttpPost]
+        public HttpResponseMessage SendInvitation([FromBody]JToken json)
+        {
+            String userId = User.Identity.GetUserId();
+            string inviterId = (string)json["inviterId"];
+
+            var user = UserManager.FindById(userId);
+
+            if(user == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            Invitation invitation = new Invitation()
+            {
+                UserId = userId,
+                Date = DateTime.Now,
+                InviterId = inviterId
+            };
+
+            invitationRepo.Add(invitation);
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         // POST user/changePassword

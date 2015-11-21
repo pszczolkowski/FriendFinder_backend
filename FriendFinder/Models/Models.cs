@@ -23,4 +23,13 @@ namespace FriendFinder.Models
         public string FriendId { get; set; }
         public string UserFriendId { get; set; }
     }
+
+    public class Invitation
+    {
+        [Key]
+        public int InvitationId { get; set; }
+        public string UserId { get; set; }
+        public string InviterId { get; set; }
+        public DateTime Date { get; set; }
+    }
 }
