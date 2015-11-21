@@ -167,15 +167,6 @@ namespace FriendFinder.Controllers
         }
 
         [Route("invitation")]
-        [HttpGet]
-        public IEnumerable<Invitation> GetInvitations()
-        {
-            String userId = User.Identity.GetUserId();
-            var invitations = invitationRepo.getInvitations(userId);
-            return invitations;
-        }
-
-        [Route("invitation")]
         [HttpPost]
         public HttpResponseMessage SendInvitation([FromBody]JToken json)
         {
