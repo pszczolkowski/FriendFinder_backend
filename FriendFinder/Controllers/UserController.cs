@@ -32,15 +32,18 @@ namespace FriendFinder.Controllers
         private PositionRepository positionRepo = new PositionRepository();
         private FriendRepository friendRepo = new FriendRepository();
         private FriendPositionRepository friendPositionRepo = new FriendPositionRepository();
+        private InvitationRepository invitationRepo = new InvitationRepository();
 
         public UserController() {}
 
         public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, 
-            FriendPositionRepository _friendPositionRepo)
+            FriendPositionRepository _friendPositionRepo, InvitationRepository _invitationRepo)
         {
             this.positionRepo = _positionRepo;
             this.friendRepo = _friendRepo;
             this.friendPositionRepo = _friendPositionRepo;
+            this.invitationRepo = _invitationRepo;
+     
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -176,6 +179,31 @@ namespace FriendFinder.Controllers
             var locations = friendPositionRepo.GetFriendLocation();
             return locations;
         }*/
+
+        [Route("invitation")]
+        [HttpPost]
+        public HttpResponseMessage SendInvitation([FromBody]JToken json)
+        {
+            String userId = User.Identity.GetUserId();
+            string inviterId = (string)json["inviterId"];
+
+            var user = UserManager.FindById(userId);
+
+            if(user == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            Invitation invitation = new Invitation()
+            {
+                UserId = userId,
+                Date = DateTime.Now,
+                InviterId = inviterId
+            };
+
+            invitationRepo.Add(invitation);
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
 
         // POST user/changePassword
         [Route("changePassword")]
