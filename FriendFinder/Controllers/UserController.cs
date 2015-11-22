@@ -180,16 +180,16 @@ namespace FriendFinder.Controllers
             return locations;
         }*/
 
-        [Route("invitation")]
+        [Route("{id}/invite")]
         [HttpPost]
-        public HttpResponseMessage SendInvitation([FromBody]JToken json)
+        public HttpResponseMessage SendInvitation(string id)
         {
-            String userId = User.Identity.GetUserId();
-            string inviterId = (string)json["inviterId"];
-
+            string userId = User.Identity.GetUserId();            
             var user = UserManager.FindById(userId);
+         
+            var inviter = UserManager.FindById(id);
 
-            if(user == null)
+            if(inviter == null || userId.Equals(id))
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
@@ -198,10 +198,11 @@ namespace FriendFinder.Controllers
             {
                 UserId = userId,
                 Date = DateTime.Now,
-                InviterId = inviterId
+                InviterId = id
             };
 
             invitationRepo.Add(invitation);
+            invitationRepo.Save();
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
