@@ -24,5 +24,11 @@ namespace FriendFinder.Repository
             var friends = context.Friends.Where(f => f.UserId == userId);
             return friends;
         }
+
+        public Friend Add(Friend friend)
+        {
+            context.Friends.Add(friend);
+            throw new NotImplementedException();
+        }
     }
 }
