@@ -38,6 +38,11 @@ namespace FriendFinder.Controllers
             var invitation = invitationRepo.getById(id);
             if(invitation != null)
             {
+                string userId = User.Identity.GetUserId();
+                if (!userId.Equals(invitation.UserId))
+                {
+                    return new HttpResponseMessage(HttpStatusCode.Forbidden);
+                }
                 invitationRepo.Delete(invitation);
                 invitationRepo.Save();
             }
@@ -52,6 +57,11 @@ namespace FriendFinder.Controllers
             if (invitation == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            string userId = User.Identity.GetUserId();
+            if (!userId.Equals(invitation.UserId))
+            {
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
             }
             var friend = new Friend()
             {
