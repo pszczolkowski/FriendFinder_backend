@@ -179,6 +179,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ImplicitQueryString.cs" />
     <Compile Include="Migrations\201511192140567_InitialCraete.cs" />
     <Compile Include="Migrations\201511192140567_InitialCraete.Designer.cs">
       <DependentUpon>201511192140567_InitialCraete.cs</DependentUpon>
@@ -189,6 +190,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Repository\FriendPositionRepository.cs" />
     <Compile Include="Repository\FriendRepository.cs" />
     <Compile Include="Repository\InvitationRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />

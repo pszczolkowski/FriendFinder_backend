@@ -7,10 +7,10 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace FriendFinder.Controllers
-{   //[Authorize]
+{   [Authorize]
     public class InvitationController : ApiController
     {
-        private InvitationRepository invitationRepo;
+        private InvitationRepository invitationRepo = new InvitationRepository();
 
         public InvitationController() { }
 

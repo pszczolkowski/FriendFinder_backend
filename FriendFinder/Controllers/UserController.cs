@@ -21,6 +21,7 @@ using FriendFinder.Repository;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
+
 namespace FriendFinder.Controllers
 {
     [Authorize]
@@ -32,13 +33,15 @@ namespace FriendFinder.Controllers
         private PositionRepository positionRepo = new PositionRepository();
         private FriendRepository friendRepo = new FriendRepository();
         private InvitationRepository invitationRepo = new InvitationRepository();
+        private FriendPositionRepository friendPositionRepo = new FriendPositionRepository();
         public UserController() {}
 
-        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, InvitationRepository _invitationRepo)
+        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, InvitationRepository _invitationRepo, FriendPositionRepository _friendPositionRepo)
         {
             this.positionRepo = _positionRepo;
             this.friendRepo = _friendRepo;
             this.invitationRepo = _invitationRepo;
+            this.friendPositionRepo = _friendPositionRepo;
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -73,7 +76,7 @@ namespace FriendFinder.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { Login = model.Login/*, UserName = model.Login */ };
+            var user = new ApplicationUser() { Login = model.Login, UserName = model.Login  };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -164,6 +167,17 @@ namespace FriendFinder.Controllers
             String userId = User.Identity.GetUserId();
             var friends = friendRepo.GetLoggedFriends(userId);
             return friends;
+        }
+        // w budowie
+        [Route("location")]
+        [HttpGet]
+        public FriendPosition GetLocation([FromUri]double longitude, double latitude, int distance)
+        {
+            
+            String userId = User.Identity.GetUserId();
+            
+            var locations = friendPositionRepo.GetFriendLocation(userId, longitude, latitude, distance);
+            return null;
         }
 
         [Route("invitation")]
