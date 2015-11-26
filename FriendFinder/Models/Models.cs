@@ -36,12 +36,12 @@ namespace FriendFinder.Models
         public double Latitude { get; set; }
     }
 
-  /*  public class PositionWithDistance
+    public class PositionWithDistance
     {
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public int Distance { get; set; }
-    }*/
+    }
     public class Invitation
     {
         [Key]
