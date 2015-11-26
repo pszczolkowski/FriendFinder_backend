@@ -170,15 +170,15 @@ namespace FriendFinder.Controllers
             var friends = friendRepo.GetLoggedFriends(userId);
             return friends;
         }
-/*
+
         [Route("location")]
         [HttpGet]
-        public IEnumerable<FriendPosition> GetLocation(double longitude, double latitude, int distance)
+        public FriendPosition GetLocation()
         {
             String userId = User.Identity.GetUserId();
-            var locations = friendPositionRepo.GetFriendLocation();
-            return locations;
-        }*/
+            var location = friendPositionRepo.GetFriendLocation(userId);
+            return location;
+        }
 
         [Route("{id}/invite")]
         [HttpPost]

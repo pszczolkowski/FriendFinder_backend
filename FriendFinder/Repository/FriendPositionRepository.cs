@@ -20,10 +20,22 @@ namespace FriendFinder.Repository
             context.SaveChanges();
         }
 
-      /*  public IEnumerable<FriendPosition> GetFriendLocation(double longitude, double latitude, int distance)
-        {
-            var friendsLocation ;//= context.Positions.Where()
-            return friendsLocation; 
-        }*/
+         public FriendPosition GetFriendLocation(string userId)
+          {
+               var friendId = context.Friends.Where(f => f.UserId == userId).Select(f => f.FriendId).First();
+              var friendUserName = context.Friends.Where(f => f.UserId == userId).Select(f => f.FriendUserName).First();
+              var positionLongitude = context.Positions.Where(f => f.UserId == friendId).Select(f => f.Longitude).First();
+              var positionLatitude = context.Positions.Where(f => f.UserId == friendId).Select(f => f.Latitude).First();
+            
+              FriendPosition friendPosition = new FriendPosition()
+              {
+                  FriendId = friendId,
+                  FriendUserName = friendUserName,
+                  Longitude = positionLongitude,
+                  Latitude = positionLatitude
+
+              };
+              return friendPosition;
+          }
     }
 }
