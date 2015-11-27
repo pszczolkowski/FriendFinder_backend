@@ -1,6 +1,7 @@
 ﻿using FriendFinder.Models;
 using FriendFinder.Repository;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ namespace FriendFinder.Controllers
     {
         private InvitationRepository invitationRepo = new InvitationRepository();
         private FriendRepository friendRepo = new FriendRepository();
-        private ApplicationUserManager _userManager;
+        private UserRepository userRepo = new UserRepository();
 
         public InvitationController() { }
 
@@ -67,7 +68,7 @@ namespace FriendFinder.Controllers
             {
                 UserId = invitation.UserId,
                 FriendId = invitation.InviterId,
-                FriendUserName = _userManager.FindById(invitation.UserId).UserName
+                FriendUserName = userRepo.FindById(invitation.UserId).UserName
             };
             friendRepo.Add(friend);
             friendRepo.Save();

@@ -28,7 +28,7 @@ namespace FriendFinder.Repository
         public Friend Add(Friend friend)
         {
             context.Friends.Add(friend);
-            throw new NotImplementedException();
+            return friend;
         }
     }
 }
