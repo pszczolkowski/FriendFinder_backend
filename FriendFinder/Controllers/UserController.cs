@@ -129,22 +129,17 @@ namespace FriendFinder.Controllers
         [HttpPost]
         public HttpResponseMessage PostPosition([FromBody]JToken json)
         {
-            String userId = User.Identity.GetUserId();
-            var jPositions = json["Positions"];
-            foreach (var jPosition in jPositions)
+            Position position = new Position()
             {
-                Position position = new Position()
-                {
-                    UserId = userId,
-                    Longitude = (double)jPosition["Longitude"],
-                    Latitude = (double)jPosition["Latitude"]
+                UserId = User.Identity.GetUserId(),
+				Longitude = (double)json[ "Longitude" ] ,
+				Latitude = (double)json[ "Latitude" ]
 
-                };
+            };
 
-                positionRepo.Add(position);
-                positionRepo.Save();
-            }
-             return new HttpResponseMessage(HttpStatusCode.OK);
+            positionRepo.Add(position);
+            positionRepo.Save();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         [Route("identity")]
