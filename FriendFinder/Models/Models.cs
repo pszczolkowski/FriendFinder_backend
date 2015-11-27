@@ -28,10 +28,10 @@ namespace FriendFinder.Models
     {
         [Key]
         [Column(Order = 1)]
-        public string FriendId { get; set; }
+        public string UserId { get; set; }
         [Key]
         [Column(Order = 2)]
-        public string FriendUserName { get; set; }
+        public string UserName { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
     }

@@ -20,6 +20,7 @@ using System.Web.Http.Cors;
 using FriendFinder.Repository;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Linq;
 
 namespace FriendFinder.Controllers
 {
@@ -168,11 +169,11 @@ namespace FriendFinder.Controllers
 
         [Route("location")]
         [HttpGet]
-        public FriendPosition GetLocation()
+        public IQueryable<Position> GetLocation()
         {
             String userId = User.Identity.GetUserId();
-            var location = friendPositionRepo.GetFriendLocation(userId);
-            return location;
+            var locations = friendPositionRepo.GetFriendsLocations(userId);
+            return locations;
         }
 
         [Route("{id}/invite")]
