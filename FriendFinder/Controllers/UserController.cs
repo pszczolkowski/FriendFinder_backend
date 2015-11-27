@@ -169,7 +169,7 @@ namespace FriendFinder.Controllers
 
         [Route("location")]
         [HttpGet]
-        public IQueryable<Position> GetLocation()
+        public IQueryable<FriendPosition> GetLocation()
         {
             String userId = User.Identity.GetUserId();
             var locations = friendPositionRepo.GetFriendsLocations(userId);

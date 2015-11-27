@@ -20,14 +20,17 @@ namespace FriendFinder.Repository
             context.SaveChanges();
         }
 
-         public IQueryable<Position> GetFriendsLocations(string userId)
+         public IQueryable<FriendPosition> GetFriendsLocations(string userId)
          {
-			 var friendIds = context.Friends
-				 .Where(f => f.UserId == userId)
-				 .Select(f => f.FriendId);
-
-			 return context.Positions
-				 .Where(p => friendIds.Contains(p.UserId));
+			 return from position in context.Positions
+					 join friend in context.Friends on position.UserId equals friend.FriendId
+					 where friend.UserId == userId
+					 select new FriendPosition() {
+						 UserId = friend.FriendId,
+						 UserName = friend.FriendUserName,
+						 Longitude = position.Longitude,
+						 Latitude = position.Latitude
+					 };
           }
     }
 }
