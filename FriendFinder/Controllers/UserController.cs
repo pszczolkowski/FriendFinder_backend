@@ -20,6 +20,7 @@ using System.Web.Http.Cors;
 using FriendFinder.Repository;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Linq;
 
 namespace FriendFinder.Controllers
 {
@@ -129,22 +130,17 @@ namespace FriendFinder.Controllers
         [HttpPost]
         public HttpResponseMessage PostPosition([FromBody]JToken json)
         {
-            String userId = User.Identity.GetUserId();
-            var jPositions = json["Positions"];
-            foreach (var jPosition in jPositions)
+            Position position = new Position()
             {
-                Position position = new Position()
-                {
-                    UserId = userId,
-                    Longitude = (double)jPosition["Longitude"],
-                    Latitude = (double)jPosition["Latitude"]
+                UserId = User.Identity.GetUserId(),
+				Longitude = (double)json[ "Longitude" ] ,
+				Latitude = (double)json[ "Latitude" ]
 
-                };
+            };
 
-                positionRepo.Add(position);
-                positionRepo.Save();
-            }
-             return new HttpResponseMessage(HttpStatusCode.OK);
+            positionRepo.Add(position);
+            positionRepo.Save();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         [Route("identity")]
@@ -173,11 +169,11 @@ namespace FriendFinder.Controllers
 
         [Route("location")]
         [HttpGet]
-        public FriendPosition GetLocation()
+        public IQueryable<FriendPosition> GetLocation()
         {
             String userId = User.Identity.GetUserId();
-            var location = friendPositionRepo.GetFriendLocation(userId);
-            return location;
+            var locations = friendPositionRepo.GetFriendsLocations(userId);
+            return locations;
         }
 
         [Route("{id}/invite")]
