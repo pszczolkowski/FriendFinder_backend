@@ -133,7 +133,8 @@ namespace FriendFinder.Controllers
 			user.Position = new Position()
             {
 				Longitude = (double)json[ "Longitude" ] ,
-				Latitude = (double)json[ "Latitude" ]
+				Latitude = (double)json[ "Latitude" ],
+				LastUpdate = DateTime.Now
 
             };
 
@@ -167,10 +168,10 @@ namespace FriendFinder.Controllers
 
         [Route("location")]
         [HttpGet]
-        public IQueryable<FriendPosition> GetLocation()
+		public IEnumerable<FriendPosition> GetLocation()
         {
             String userId = User.Identity.GetUserId();
-            var locations = friendPositionRepo.GetFriendsLocations(userId);
+            var locations = friendPositionRepo.GetLoggedFriendsLocations(userId);
             return locations;
         }
 

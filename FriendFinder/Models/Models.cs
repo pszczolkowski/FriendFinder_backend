@@ -12,6 +12,7 @@ namespace FriendFinder.Models
     {
         public double Longitude {get; set;}
         public double Latitude { get; set; }
+		public DateTime LastUpdate { get; set; }
     }
 
     public class Friend

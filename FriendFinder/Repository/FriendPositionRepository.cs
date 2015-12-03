@@ -8,6 +8,8 @@ namespace FriendFinder.Repository
 {
     public class FriendPositionRepository : IRepository<FriendPosition>
     {
+		private static const int MAX_POSITION_UPDATE_SECONDS = 30;
+
         private ApplicationDbContext context;
 
         public FriendPositionRepository()
@@ -20,11 +22,11 @@ namespace FriendFinder.Repository
             context.SaveChanges();
         }
 
-         public IQueryable<FriendPosition> GetFriendsLocations(string userId)
+         public IQueryable<FriendPosition> GetLoggedFriendsLocations(string userId)
          {
 			 return from friend in context.Friends
 					 join user in context.Users on friend.FriendId equals user.Id
-					 where friend.UserId == userId
+					 where friend.UserId == userId && user.Position.LastUpdate.AddSeconds(MAX_POSITION_UPDATE_SECONDS) > DateTime.Now
 					 select new FriendPosition() {
 						 UserId = friend.FriendId ,
 						 UserName = friend.FriendUserName ,
