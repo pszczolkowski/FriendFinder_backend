@@ -22,14 +22,14 @@ namespace FriendFinder.Repository
 
          public IQueryable<FriendPosition> GetFriendsLocations(string userId)
          {
-			 return from position in context.Positions
-					 join friend in context.Friends on position.UserId equals friend.FriendId
+			 return from friend in context.Friends
+					 join user in context.Users on friend.FriendId equals user.Id
 					 where friend.UserId == userId
 					 select new FriendPosition() {
-						 UserId = friend.FriendId,
-						 UserName = friend.FriendUserName,
-						 Longitude = position.Longitude,
-						 Latitude = position.Latitude
+						 UserId = friend.FriendId ,
+						 UserName = friend.FriendUserName ,
+						 Longitude = user.Position.Longitude ,
+						 Latitude = user.Position.Latitude
 					 };
           }
     }

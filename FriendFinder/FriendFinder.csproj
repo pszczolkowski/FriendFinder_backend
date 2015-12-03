@@ -194,7 +194,6 @@
     <Compile Include="Repository\FriendRepository.cs" />
     <Compile Include="Repository\InvitationRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Repository\PositionRepository.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

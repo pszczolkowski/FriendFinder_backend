@@ -30,17 +30,15 @@ namespace FriendFinder.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private PositionRepository positionRepo = new PositionRepository();
         private FriendRepository friendRepo = new FriendRepository();
         private FriendPositionRepository friendPositionRepo = new FriendPositionRepository();
         private InvitationRepository invitationRepo = new InvitationRepository();
 
         public UserController() {}
 
-        public UserController(PositionRepository _positionRepo, FriendRepository _friendRepo, 
+        public UserController(FriendRepository _friendRepo, 
             FriendPositionRepository _friendPositionRepo, InvitationRepository _invitationRepo)
         {
-            this.positionRepo = _positionRepo;
             this.friendRepo = _friendRepo;
             this.friendPositionRepo = _friendPositionRepo;
             this.invitationRepo = _invitationRepo;
@@ -130,16 +128,16 @@ namespace FriendFinder.Controllers
         [HttpPost]
         public HttpResponseMessage PostPosition([FromBody]JToken json)
         {
-            Position position = new Position()
+			ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+
+			user.Position = new Position()
             {
-                UserId = User.Identity.GetUserId(),
 				Longitude = (double)json[ "Longitude" ] ,
 				Latitude = (double)json[ "Latitude" ]
 
             };
 
-            positionRepo.Add(position);
-            positionRepo.Save();
+			UserManager.Update(user);
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 

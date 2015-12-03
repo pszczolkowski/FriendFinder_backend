@@ -7,11 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FriendFinder.Models
 {
+	[ComplexType]
     public class Position
     {
-        [Key]
-        [Column(Order = 1)]
-        public string UserId { get; set; }
         public double Longitude {get; set;}
         public double Latitude { get; set; }
     }

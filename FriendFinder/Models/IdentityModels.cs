@@ -12,6 +12,8 @@ namespace FriendFinder.Models
     {
         public string Login { get; internal set; }
 
+		public Position Position { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -25,7 +27,6 @@ namespace FriendFinder.Models
     {
         public ApplicationDbContext() : base("FriendFinderDB") { }
 
-        public DbSet<Position> Positions { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
        // public DbSet<FriendPosition> FriendPosition { get; set; }
