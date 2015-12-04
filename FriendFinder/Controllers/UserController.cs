@@ -175,32 +175,6 @@ namespace FriendFinder.Controllers
             return locations;
         }
 
-        [Route("{id}/invite")]
-        [HttpPost]
-        public HttpResponseMessage SendInvitation(string id)
-        {
-            string userId = User.Identity.GetUserId();            
-            var user = UserManager.FindById(userId);
-         
-            var inviter = UserManager.FindById(id);
-
-            if(inviter == null || userId.Equals(id))
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-
-            Invitation invitation = new Invitation()
-            {
-                UserId = userId,
-                Date = DateTime.Now,
-                InviterId = id
-            };
-
-            invitationRepo.Add(invitation);
-            invitationRepo.Save();
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
         // POST user/changePassword
         [Route("changePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
