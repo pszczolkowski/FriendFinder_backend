@@ -16,13 +16,15 @@ namespace FriendFinder.Controllers
         private FriendRepository friendRepo = new FriendRepository();
         private UserRepository userRepo = new UserRepository();
 		private ApplicationUserManager _userManager;
+		private ApplicationDbContext Context;
 
         public InvitationController() { }
 
-        public InvitationController(InvitationRepository invitationRepo, FriendRepository friendRepo)
+        public InvitationController(InvitationRepository invitationRepo, FriendRepository friendRepo, ApplicationDbContext context)
         {
             this.invitationRepo = invitationRepo;
             this.friendRepo = friendRepo;
+			this.Context = context;
         }
 
 		public ApplicationUserManager UserManager {
@@ -78,17 +80,18 @@ namespace FriendFinder.Controllers
         public HttpResponseMessage DeclineInvitation(int id)
         {
             var invitation = invitationRepo.getById(id);
-            if(invitation != null)
-            {
-                string userId = User.Identity.GetUserId();
-                if (!userId.Equals(invitation.UserId))
-                {
-                    return new HttpResponseMessage(HttpStatusCode.Forbidden);
-                }
-                invitationRepo.Delete(invitation);
-                invitationRepo.Save();
-            }
-            return new HttpResponseMessage(HttpStatusCode.OK);
+
+			if (invitation == null) {
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invitation doesn't exist");
+			}
+			if(invitation.InvitedId != User.Identity.GetUserId()) {
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invitation doesn't exist");
+			}
+
+			invitationRepo.Delete( invitation );
+			invitationRepo.Save();
+
+			return new HttpResponseMessage( HttpStatusCode.OK );
         }
 
         [Route("invitation/{id}/accept")]
@@ -96,25 +99,28 @@ namespace FriendFinder.Controllers
         public HttpResponseMessage AcceptInvitation(int id)
         {
             var invitation = invitationRepo.getById(id);
-            if (invitation == null)
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-            string userId = User.Identity.GetUserId();
-            if (!userId.Equals(invitation.UserId))
-            {
-                return new HttpResponseMessage(HttpStatusCode.Forbidden);
-            }
-            var friend = new Friend()
-            {
-                UserId = invitation.UserId,
-                FriendId = invitation.InviterId,
-                FriendUserName = userRepo.FindById(invitation.UserId).UserName
-            };
-            friendRepo.Add(friend);
-            friendRepo.Save();
-            invitationRepo.Delete(invitation);
-            invitationRepo.Save();
+
+			if(invitation == null) {
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invitation doesn't exist");
+			}
+			if(invitation.InvitedId != User.Identity.GetUserId()) {
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invitation doesn't exist");
+			}
+
+			using (Context.Database.BeginTransaction()) {
+				var friend = new Friend() {
+					UserId = invitation.InvitingId ,
+					FriendId = invitation.InvitedId ,
+					FriendUserName = userRepo.FindById(invitation.InvitedId).UserName
+				};
+				friendRepo.Add(friend);
+				friendRepo.Save();
+
+				invitationRepo.Delete(invitation);
+				invitationRepo.Save();
+			}
+
+            
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }

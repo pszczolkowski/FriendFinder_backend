@@ -8,7 +8,7 @@ namespace FriendFinder.Repository
 {
     public class FriendPositionRepository : IRepository<FriendPosition>
     {
-		private static const int MAX_POSITION_UPDATE_SECONDS = 30;
+		private const int MAX_POSITION_UPDATE_SECONDS = 30;
 
         private ApplicationDbContext context;
 
