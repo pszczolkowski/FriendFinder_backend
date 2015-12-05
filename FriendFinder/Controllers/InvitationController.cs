@@ -1,9 +1,11 @@
 ﻿using FriendFinder.Models;
 using FriendFinder.Repository;
+using FriendFinder.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -14,17 +16,18 @@ namespace FriendFinder.Controllers
     {
         private InvitationRepository invitationRepo = new InvitationRepository();
         private FriendRepository friendRepo = new FriendRepository();
-        private UserRepository userRepo = new UserRepository();
 		private ApplicationUserManager _userManager;
 		private ApplicationDbContext Context;
+		private UserRepository userRepository;
 
         public InvitationController() { }
 
-        public InvitationController(InvitationRepository invitationRepo, FriendRepository friendRepo, ApplicationDbContext context)
+        public InvitationController(InvitationRepository invitationRepo, FriendRepository friendRepo, ApplicationDbContext context, UserRepository userRepository)
         {
             this.invitationRepo = invitationRepo;
             this.friendRepo = friendRepo;
 			this.Context = context;
+			this.userRepository = userRepository;
         }
 
 		public ApplicationUserManager UserManager {
@@ -38,11 +41,16 @@ namespace FriendFinder.Controllers
 
         [Route("invitation")]
         [HttpGet]
-        public IEnumerable<Invitation> GetInvitations()
+        public IEnumerable<InvitationViewModel> GetInvitations()
         {
             string userId = User.Identity.GetUserId();
-            var invitations = invitationRepo.getInvitations(userId);
-            return invitations;
+            IQueryable<Invitation> invitations = invitationRepo.getInvitations(userId);
+			IQueryable<ApplicationUser> users = userRepository.FindAll();
+
+
+			return from invitation in invitations
+				   join user in users on invitation.InvitingId equals user.Id
+					select new InvitationViewModel(invitation, user);
         }
 
 		[Route( "user/{id}/invite" )]
@@ -111,7 +119,7 @@ namespace FriendFinder.Controllers
 				var friend = new Friend() {
 					UserId = invitation.InvitingId ,
 					FriendId = invitation.InvitedId ,
-					FriendUserName = userRepo.FindById(invitation.InvitedId).UserName
+					FriendUserName = userRepository.FindById(invitation.InvitedId).UserName
 				};
 				friendRepo.Add(friend);
 				friendRepo.Save();

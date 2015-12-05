@@ -25,5 +25,9 @@ namespace FriendFinder.Repository
             var user = context.Users.FirstOrDefault(u => u.Id.Equals(UserId));
             return user;
         }
+
+	   public IQueryable<ApplicationUser> FindAll() {
+		   return context.Users;
+	   }
     }
 }
