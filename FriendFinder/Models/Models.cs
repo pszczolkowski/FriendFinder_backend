@@ -41,12 +41,5 @@ namespace FriendFinder.Models
         public double Latitude { get; set; }
         public int Distance { get; set; }
     }
-    public class Invitation
-    {
-        [Key]
-        public int Id { get; set; }
-        public string InvitingId { get; set; }
-        public string InvitedId { get; set; }
-        public DateTime Date { get; set; }
-    }
+    
 }
