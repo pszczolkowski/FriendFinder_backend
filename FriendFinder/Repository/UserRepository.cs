@@ -8,6 +8,8 @@ namespace FriendFinder.Repository
 {
     public class UserRepository : IRepository<ApplicationUser>
     {
+		private const int MAX_UPDATE_INTERVAL_FOR_BEING_LOGGED = 30;
+
         private ApplicationDbContext context;
 
         public UserRepository()
@@ -28,6 +30,13 @@ namespace FriendFinder.Repository
 
 	   public IQueryable<ApplicationUser> FindAll() {
 		   return context.Users;
+	   }
+
+	   public IEnumerable<ApplicationUser> FindLoggedFriendsOf(string userId) {
+		   return context.Users
+			   .First(u => u.Id == userId)
+			   .Friends
+			   .Where(u => u.Position.LastUpdate.AddSeconds(MAX_UPDATE_INTERVAL_FOR_BEING_LOGGED) >= DateTime.Now);
 	   }
     }
 }

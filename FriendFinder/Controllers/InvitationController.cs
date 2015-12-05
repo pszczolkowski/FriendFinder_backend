@@ -15,17 +15,15 @@ namespace FriendFinder.Controllers
     public class InvitationController : ApiController
     {
         private InvitationRepository invitationRepo = new InvitationRepository();
-        private FriendRepository friendRepo = new FriendRepository();
 		private ApplicationUserManager _userManager;
 		private ApplicationDbContext Context;
 		private UserRepository userRepository;
 
         public InvitationController() { }
 
-        public InvitationController(InvitationRepository invitationRepo, FriendRepository friendRepo, ApplicationDbContext context, UserRepository userRepository)
+        public InvitationController(InvitationRepository invitationRepo, ApplicationDbContext context, UserRepository userRepository)
         {
             this.invitationRepo = invitationRepo;
-            this.friendRepo = friendRepo;
 			this.Context = context;
 			this.userRepository = userRepository;
         }
@@ -65,10 +63,10 @@ namespace FriendFinder.Controllers
 			if(loggedUserId.Equals(invitedUserId)) {
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "You cannot invite yourself");
 			}
-
-			// TODO check if user is already friend with invited one
-
-			if( invitationRepo.getForUsers( loggedUserId , invitedUserId ) != null ) {
+			if (invitedUser.Friends.Any(u => u.Id == loggedUserId)) {
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "You are already friend with that user");
+			}
+			if (invitationRepo.getForUsers( loggedUserId, invitedUserId) != null) {
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Friend invitation for that user is already active");
 			}
 
@@ -115,14 +113,15 @@ namespace FriendFinder.Controllers
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invitation doesn't exist");
 			}
 
+			var invitingUser = userRepository.FindById(invitation.InvitingId);
+			var loggedUser = userRepository.FindById(User.Identity.GetUserId());
+
 			using (Context.Database.BeginTransaction()) {
-				var friend = new Friend() {
-					UserId = invitation.InvitingId ,
-					FriendId = invitation.InvitedId ,
-					FriendUserName = userRepository.FindById(invitation.InvitedId).UserName
-				};
-				friendRepo.Add(friend);
-				friendRepo.Save();
+				invitingUser.Friends.Add(loggedUser);
+				loggedUser.Friends.Add(invitingUser);
+
+				UserManager.Update(invitingUser);
+				UserManager.Update(loggedUser);
 
 				invitationRepo.Delete(invitation);
 				invitationRepo.Save();

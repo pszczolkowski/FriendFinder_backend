@@ -186,7 +186,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Invitation.cs" />
-    <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\Position.cs" />
     <Compile Include="Models\UserBindingModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -198,6 +198,8 @@
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\FriendPositionViewModel.cs" />
+    <Compile Include="ViewModels\FriendViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

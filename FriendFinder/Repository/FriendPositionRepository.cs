@@ -6,7 +6,7 @@ using FriendFinder.Models;
 
 namespace FriendFinder.Repository
 {
-    public class FriendPositionRepository : IRepository<FriendPosition>
+    /*public class FriendPositionRepository : IRepository<FriendPosition>
     {
 		private const int MAX_POSITION_UPDATE_SECONDS = 30;
 
@@ -34,5 +34,5 @@ namespace FriendFinder.Repository
 						 Latitude = user.Position.Latitude
 					 };
           }
-    }
+    }*/
 }

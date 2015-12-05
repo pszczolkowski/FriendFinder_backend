@@ -9,7 +9,6 @@ namespace FriendFinder.Models {
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
 		public ApplicationDbContext() : base("FriendFinderDB") { }
 
-		public DbSet<Friend> Friends { get; set; }
 		public DbSet<Invitation> Invitations { get; set; }
 		
 		public static ApplicationDbContext Create() {

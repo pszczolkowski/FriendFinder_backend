@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace FriendFinder.Models
 {
@@ -13,6 +14,8 @@ namespace FriendFinder.Models
         public string Login { get; internal set; }
 
 		public Position Position { get; set; }
+
+		public virtual ICollection<ApplicationUser> Friends { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {

@@ -5,7 +5,7 @@ using System.Web;
 using FriendFinder.Models;
 namespace FriendFinder.Repository
 {
-    public class FriendRepository : IRepository<Friend>
+    /*public class FriendRepository : IRepository<Friend>
     {
         private ApplicationDbContext context;
 
@@ -30,5 +30,5 @@ namespace FriendFinder.Repository
             context.Friends.Add(friend);
             return friend;
         }
-    }
+    }*/
 }
