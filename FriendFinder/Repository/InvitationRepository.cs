@@ -24,7 +24,7 @@ namespace FriendFinder.Repository
 
         public Invitation getById(int id)
         {
-            var invitation = context.Invitations.Where(i => i.Id == id).FirstOrDefault();
+            var invitation = context.Invitations.Where(i => i.InvitationId == id).FirstOrDefault();
             return invitation;
         }
 
