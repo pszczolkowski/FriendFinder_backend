@@ -38,5 +38,10 @@ namespace FriendFinder.Repository
 			   .Friends
 			   .Where(u => u.Position.LastUpdate.AddSeconds(MAX_UPDATE_INTERVAL_FOR_BEING_LOGGED) >= DateTime.Now);
 	   }
+
+	   public ApplicationUser FindByUsername(string username) {
+		   return context.Users
+			   .FirstOrDefault(u => u.UserName == username);
+	   }
     }
 }

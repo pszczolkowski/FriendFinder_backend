@@ -51,28 +51,28 @@ namespace FriendFinder.Controllers
 					select new InvitationViewModel(invitation, user);
         }
 
-		[Route( "user/{id}/invite" )]
+		[Route( "user/{username}/invite" )]
 		[HttpPost]
-		public HttpResponseMessage SendInvitation( string invitedUserId ) {
+		public HttpResponseMessage SendInvitation(string username) {
 			string loggedUserId = User.Identity.GetUserId();
-			var invitedUser = UserManager.FindById( invitedUserId );
-
+			var invitedUser = userRepository.FindByUsername(username);
+			
 			if(invitedUser == null) {
-				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User with given id doesn't exist");
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User with given username doesn't exist");
 			}
-			if(loggedUserId.Equals(invitedUserId)) {
+			if (loggedUserId.Equals(invitedUser.Id)) {
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "You cannot invite yourself");
 			}
 			if (invitedUser.Friends.Any(u => u.Id == loggedUserId)) {
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "You are already friend with that user");
 			}
-			if (invitationRepo.getForUsers( loggedUserId, invitedUserId) != null) {
+			if (invitationRepo.getForUsers(loggedUserId, invitedUser.Id) != null) {
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Friend invitation for that user is already active");
 			}
 
 			Invitation invitation = new Invitation() {
 				InvitingId = loggedUserId,
-				InvitedId = invitedUserId,
+				InvitedId = invitedUser.Id,
 				Date = DateTime.Now
 			};
 
