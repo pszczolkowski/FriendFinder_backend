@@ -43,7 +43,7 @@ namespace FriendFinder.Controllers
         {
             string userId = User.Identity.GetUserId();
             IQueryable<Invitation> invitations = invitationRepo.getInvitations(userId);
-			IQueryable<ApplicationUser> users = userRepository.FindAll();
+            IEnumerable<ApplicationUser> users = userRepository.FindAll();
 
 
 			return from invitation in invitations

@@ -28,7 +28,7 @@ namespace FriendFinder.Repository
             return user;
         }
 
-	   public IQueryable<ApplicationUser> FindAll() {
+	   public virtual IQueryable<ApplicationUser> FindAll() {
 		   return context.Users;
 	   }
 
