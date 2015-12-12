@@ -32,14 +32,13 @@ namespace FriendFinder.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private InvitationRepository invitationRepo = new InvitationRepository();
-		private UserRepository userRepository;
+		private UserRepository userRepository = new UserRepository();
 
         public UserController() {}
 
         public UserController(InvitationRepository _invitationRepo, UserRepository userRepository)
         {
             this.invitationRepo = _invitationRepo;
-			this.userRepository = userRepository;
         }
 
         public UserController(ApplicationUserManager userManager,
