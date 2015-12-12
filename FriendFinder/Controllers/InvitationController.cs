@@ -16,16 +16,14 @@ namespace FriendFinder.Controllers
     {
         private InvitationRepository invitationRepo = new InvitationRepository();
 		private ApplicationUserManager _userManager;
-		private ApplicationDbContext Context;
-		private UserRepository userRepository;
+		private ApplicationDbContext Context = new ApplicationDbContext();
+		private UserRepository userRepository = new UserRepository();
 
         public InvitationController() { }
 
-        public InvitationController(InvitationRepository invitationRepo, ApplicationDbContext context, UserRepository userRepository)
+        public InvitationController(ApplicationDbContext context)
         {
-            this.invitationRepo = invitationRepo;
 			this.Context = context;
-			this.userRepository = userRepository;
         }
 
 		public ApplicationUserManager UserManager {
@@ -47,7 +45,7 @@ namespace FriendFinder.Controllers
 
 
 			return from invitation in invitations
-				   join user in users on invitation.InvitingId equals user.Id
+				   join user in users.AsEnumerable() on invitation.InvitingId equals user.Id
 					select new InvitationViewModel(invitation, user);
         }
 
@@ -120,8 +118,10 @@ namespace FriendFinder.Controllers
 				invitingUser.Friends.Add(loggedUser);
 				loggedUser.Friends.Add(invitingUser);
 
-				UserManager.Update(invitingUser);
-				UserManager.Update(loggedUser);
+
+                userRepository.Save();
+               // _userManager.Update(invitingUser);
+               // _userManager.Update(loggedUser);
 
 				invitationRepo.Delete(invitation);
 				invitationRepo.Save();
