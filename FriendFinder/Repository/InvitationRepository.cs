@@ -30,7 +30,7 @@ namespace FriendFinder.Repository
 
         public IQueryable<Invitation> getInvitations(string UserId)
         {
-            return context.Invitations.Where(i => i.InvitedId == UserId);
+			return context.Invitations.Include( "InvitingUser" ).Where( i => i.InvitedId == UserId );
         }
 
 		public Invitation getForUsers(string firstUserId, string secondUserId) {

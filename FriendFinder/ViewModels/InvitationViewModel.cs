@@ -7,13 +7,6 @@ using System.Web;
 namespace FriendFinder.ViewModels {
 	public class InvitationViewModel {
 
-		public InvitationViewModel(Invitation invitation, ApplicationUser invitingUser) {
-			this.id = invitation.InvitationId;
-			this.invitingId = invitation.InvitingId;
-			this.invitingName = invitingUser.UserName;
-			this.sentAt = invitation.Date;
-		}
-
 		public int id { get; set; }
 		public string invitingId { get; set; }
 		public string invitingName { get; set; }

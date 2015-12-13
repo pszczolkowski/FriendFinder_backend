@@ -41,12 +41,14 @@ namespace FriendFinder.Controllers
         {
             string userId = User.Identity.GetUserId();
             IQueryable<Invitation> invitations = invitationRepo.getInvitations(userId);
-			IQueryable<ApplicationUser> users = userRepository.FindAll();
-
 
 			return from invitation in invitations
-				   join user in users.AsEnumerable() on invitation.InvitingId equals user.Id
-					select new InvitationViewModel(invitation, user);
+				   select new InvitationViewModel() {
+					   id = invitation.InvitationId,
+					   invitingId = invitation.InvitingId,
+					   invitingName = invitation.InvitingUser.UserName,
+					   sentAt = invitation.Date
+				   };
         }
 
 		[Route( "user/{username}/invite" )]

@@ -33,10 +33,10 @@ namespace FriendFinder.Repository
 	   }
 
 	   public IEnumerable<ApplicationUser> FindLoggedFriendsOf(string userId) {
-            return context.Users
+			return context.Users
                 .First(u => u.Id == userId)
-                .Friends;
-			   //.Where(u => u.Position.LastUpdate.AddSeconds(MAX_UPDATE_INTERVAL_FOR_BEING_LOGGED) >= DateTime.Now);
+                .Friends
+			    .Where(u => u.Position.LastUpdate.AddSeconds(MAX_UPDATE_INTERVAL_FOR_BEING_LOGGED) >= DateTime.Now);
 	   }
 
 	   public ApplicationUser FindByUsername(string username) {
