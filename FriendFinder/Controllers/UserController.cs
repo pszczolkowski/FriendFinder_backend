@@ -161,7 +161,10 @@ namespace FriendFinder.Controllers
 			var friends = userRepository.FindLoggedFriendsOf(loggedUserId);
 
 			return from friend in friends
-				select new FriendViewModel(friend);
+				   select new FriendViewModel() {
+					   id = friend.Id,
+					   username = friend.UserName
+				   };
         }
 
         [Route("location")]
@@ -172,7 +175,12 @@ namespace FriendFinder.Controllers
 			var friends = userRepository.FindLoggedFriendsOf(loggedUserId);
 
 			return from friend in friends
-				   select new FriendPositionViewModel(friend);
+				   select new FriendPositionViewModel() {
+					   id = friend.Id,
+					   latitude = friend.Position.Latitude,
+					   longitude = friend.Position.Longitude,
+					   username = friend.UserName
+				   };
         }
 
         // POST user/changePassword
