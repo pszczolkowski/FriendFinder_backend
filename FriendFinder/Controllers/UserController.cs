@@ -158,7 +158,7 @@ namespace FriendFinder.Controllers
         public IEnumerable<FriendViewModel> GetFriend()
         {
             String loggedUserId = User.Identity.GetUserId();
-			var friends = userRepository.FindLoggedFriendsOf(loggedUserId);
+			var friends = userRepository.FindFriendsOf(loggedUserId);
 
 			return from friend in friends
 				   select new FriendViewModel() {
