@@ -11,6 +11,12 @@ namespace FriendFinder.Tests
     [TestClass()]
     public class UserControllerTests
     {
+        [TestInitialize]
+        public void setUp()
+        {
+            
+        }
+
         [TestMethod()]
         public void UserControllerTest()
         {
