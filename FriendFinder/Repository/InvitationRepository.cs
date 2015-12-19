@@ -28,11 +28,17 @@ namespace FriendFinder.Repository
             return invitation;
         }
 
-        public IEnumerable<Invitation> getInvitations(string UserId)
+        public IQueryable<Invitation> getInvitations(string UserId)
         {
-            var invitations = context.Invitations.Where(i => i.UserId == UserId);
-            return invitations;
+			return context.Invitations.Include( "InvitingUser" ).Where( i => i.InvitedId == UserId );
         }
+
+		public Invitation getForUsers(string firstUserId, string secondUserId) {
+			return context.Invitations
+				.Where(invitation => (invitation.InvitedId == firstUserId && invitation.InvitingId == secondUserId) ||
+					(invitation.InvitedId == secondUserId && invitation.InvitingId == firstUserId))
+				.FirstOrDefault();
+		}
 
         public Invitation Add(Invitation invitation)
         {

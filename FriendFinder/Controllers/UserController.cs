@@ -21,6 +21,7 @@ using FriendFinder.Repository;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Linq;
+using FriendFinder.ViewModels;
 
 namespace FriendFinder.Controllers
 {
@@ -30,19 +31,14 @@ namespace FriendFinder.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private FriendRepository friendRepo = new FriendRepository();
-        private FriendPositionRepository friendPositionRepo = new FriendPositionRepository();
         private InvitationRepository invitationRepo = new InvitationRepository();
+		private UserRepository userRepository = new UserRepository();
 
         public UserController() {}
 
-        public UserController(FriendRepository _friendRepo, 
-            FriendPositionRepository _friendPositionRepo, InvitationRepository _invitationRepo)
+        public UserController(InvitationRepository _invitationRepo, UserRepository userRepository)
         {
-            this.friendRepo = _friendRepo;
-            this.friendPositionRepo = _friendPositionRepo;
             this.invitationRepo = _invitationRepo;
-     
         }
 
         public UserController(ApplicationUserManager userManager,
@@ -77,7 +73,7 @@ namespace FriendFinder.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { Login = model.Login, UserName = model.Login  };
+            var user = new ApplicationUser() { UserName = model.Login  };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -159,46 +155,32 @@ namespace FriendFinder.Controllers
             
         [Route("friend")]
         [HttpGet]
-        public IEnumerable<Friend> GetFriend()
+        public IEnumerable<FriendViewModel> GetFriend()
         {
-            String userId = User.Identity.GetUserId();
-            var friends = friendRepo.GetLoggedFriends(userId);
-            return friends;
+            String loggedUserId = User.Identity.GetUserId();
+			var friends = userRepository.FindFriendsOf(loggedUserId);
+
+			return from friend in friends
+				   select new FriendViewModel() {
+					   id = friend.Id,
+					   username = friend.UserName
+				   };
         }
 
         [Route("location")]
         [HttpGet]
-		public IEnumerable<FriendPosition> GetLocation()
+		public IEnumerable<FriendPositionViewModel> GetLocation()
         {
-            String userId = User.Identity.GetUserId();
-            var locations = friendPositionRepo.GetLoggedFriendsLocations(userId);
-            return locations;
-        }
+			String loggedUserId = User.Identity.GetUserId();
+			var friends = userRepository.FindLoggedFriendsOf(loggedUserId);
 
-        [Route("{id}/invite")]
-        [HttpPost]
-        public HttpResponseMessage SendInvitation(string id)
-        {
-            string userId = User.Identity.GetUserId();            
-            var user = UserManager.FindById(userId);
-         
-            var inviter = UserManager.FindById(id);
-
-            if(inviter == null || userId.Equals(id))
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-
-            Invitation invitation = new Invitation()
-            {
-                UserId = userId,
-                Date = DateTime.Now,
-                InviterId = id
-            };
-
-            invitationRepo.Add(invitation);
-            invitationRepo.Save();
-            return new HttpResponseMessage(HttpStatusCode.OK);
+			return from friend in friends
+				   select new FriendPositionViewModel() {
+					   id = friend.Id,
+					   latitude = friend.Position.Latitude,
+					   longitude = friend.Position.Longitude,
+					   username = friend.UserName
+				   };
         }
 
         // POST user/changePassword

@@ -4,15 +4,26 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
+using System.Collections.Generic;
+using System;
 
 namespace FriendFinder.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        public string Login { get; internal set; }
 
 		public Position Position { get; set; }
+
+		public virtual ICollection<ApplicationUser> Friends { get; set; }
+
+		public ApplicationUser() {
+			Position = new Position {
+				Latitude = 0,
+				Longitude = 0,
+				LastUpdate = DateTime.Now
+			};
+		}
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
@@ -23,16 +34,4 @@ namespace FriendFinder.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext() : base("FriendFinderDB") { }
-
-        public DbSet<Friend> Friends { get; set; }
-        public DbSet<Invitation> Invitations { get; set; }
-       // public DbSet<FriendPosition> FriendPosition { get; set; }
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-    }
 }
