@@ -16,7 +16,7 @@ namespace FriendFinder.Tests
         {
             
         }
-
+/*
         [TestMethod()]
         public void UserControllerTest()
         {
@@ -81,6 +81,6 @@ namespace FriendFinder.Tests
         public void SetPasswordTest()
         {
             Assert.Fail();
-        }
+        }*/
     }
 }

@@ -17,36 +17,37 @@ namespace FriendFinder.Repository
             context = new ApplicationDbContext();
         }
 
-        public void Save()
+        public virtual void Save()
         {
             context.SaveChanges();
         }
 
-        public Invitation getById(int id)
+        public virtual Invitation getById(int id)
         {
             var invitation = context.Invitations.Where(i => i.InvitationId == id).FirstOrDefault();
             return invitation;
         }
 
-        public IQueryable<Invitation> getInvitations(string UserId)
+        public virtual IQueryable<Invitation> getInvitations(string UserId)
         {
 			return context.Invitations.Include( "InvitingUser" ).Where( i => i.InvitedId == UserId );
         }
 
-		public Invitation getForUsers(string firstUserId, string secondUserId) {
+        public virtual Invitation getForUsers(string firstUserId, string secondUserId)
+        {
 			return context.Invitations
 				.Where(invitation => (invitation.InvitedId == firstUserId && invitation.InvitingId == secondUserId) ||
 					(invitation.InvitedId == secondUserId && invitation.InvitingId == firstUserId))
 				.FirstOrDefault();
 		}
 
-        public Invitation Add(Invitation invitation)
+        public virtual Invitation Add(Invitation invitation)
         {
             context.Invitations.Add(invitation);
             return invitation;
         }
 
-        public void Delete(Invitation invitation)
+        public virtual void Delete(Invitation invitation)
         {
             context.Invitations.Remove(invitation);
         }
